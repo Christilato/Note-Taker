@@ -1,19 +1,20 @@
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
-const { response } = require('express');
 
 const app = express();
 const PORT = 3001;
 
-// Creating HTML Routes
+// Middleware for parsing JSON and urlencoded form data
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static('public'));
 
-// GET /notes should return notes.html file
-app.get("/notes", (req, res) =>
-    response.sendFile(path.join(__dirname, '../public/notes.html'))
+require("./routes/routes")(app);
+
+
+// turns server on and connects to port 3001
+app.listen(PORT, () =>
+    console.log(`App listening at http://localhost:${PORT}`)
 );
 
-// GET * should return index.html
-app.get('*', (req, res) =>
-    response.sendFile(path.join(__dirname, '../index.html'))
-);
